@@ -1,8 +1,9 @@
 import { useNotes } from "../../context/note-context";
-
+import { findNotesInArchive } from "../../utils/findNotsInArchive";
 export const NotesCard = ({ id, title, noteContent, isPinned }) => {
-  const { notesDispatch } = useNotes();
+  const { notesDispatch, archive } = useNotes();
 
+  const isNotesInArchive = findNotesInArchive(archive, id);
   const onPinClick = (id) => {
     !isPinned
       ? notesDispatch({
@@ -16,10 +17,15 @@ export const NotesCard = ({ id, title, noteContent, isPinned }) => {
   };
 
   const onArchiveClick = (id) => {
-    notesDispatch({
-      type: "ARCHIVE",
-      payload: { id },
-    });
+    !isNotesInArchive
+      ? notesDispatch({
+          type: "ADD_ARCHIVE",
+          payload: { id },
+        })
+      : notesDispatch({
+          type: "REMOVE_FROM_ARCHIVE",
+          payload: { id },
+        });
   };
 
   return (
@@ -29,19 +35,31 @@ export const NotesCard = ({ id, title, noteContent, isPinned }) => {
     >
       <div className="flex justify-between">
         <p>{title}</p>
-        <button onClick={() => onPinClick(id)}>
-          <span
-            className={isPinned ? "material-icons" : "material-icons-outlined"}
-          >
-            push_pin
-          </span>
-        </button>
+        {!isNotesInArchive ? (
+          <button onClick={() => onPinClick(id)}>
+            <span
+              className={
+                isPinned ? "material-icons" : "material-icons-outlined"
+              }
+            >
+              push_pin
+            </span>
+          </button>
+        ) : (
+          <></>
+        )}
       </div>
       <div className="flex flex-col">
         <p>{noteContent}</p>
         <div className="ml-auto">
           <button onClick={() => onArchiveClick(id)}>
-            <span className="material-icons-outlined">archive</span>
+            <span
+              className={
+                isNotesInArchive ? "material-icons" : "material-icons-outlined"
+              }
+            >
+              archive
+            </span>
           </button>
           <button>
             <span className="material-icons-outlined">delete</span>

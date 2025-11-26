@@ -5,7 +5,7 @@ import { NotesCard } from "../../components/NotesCard";
 import { useNotes } from "../../context/note-context";
 
 export const Home = () => {
-  const { title, noteContent, notes, archive, notesDispatch } = useNotes();
+  const { title, noteContent, notes, notesDispatch } = useNotes();
 
   const onTitleChange = (e) => {
     notesDispatch({

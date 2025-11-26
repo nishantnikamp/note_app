@@ -10,7 +10,7 @@ export const Archive = () => {
   return (
     <Fragment>
       <Navbar />
-      <main className="flex flex-col gap-0">
+      <main className="flex gap-5">
         <Sidebar />
         <div>
           <div className="flex flex-wrap gap-10 w-screen mt-7">
